@@ -1,3 +1,5 @@
+import interfaces.Attachment
+
 fun main() {
 }
 
@@ -28,6 +30,7 @@ data class Post(
     val postSource: PostSource? = null,
     val geo: PostGeo? = null,
     val copyHistory: ArrayList<Any>? = null,
+    val attachments: ArrayList<Attachment>? = null,
 )
 
 object WallService {
