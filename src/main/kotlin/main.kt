@@ -25,6 +25,9 @@ data class Post(
     val markedAsAds: Boolean = true,
     val isFavorite: Boolean = true,
     val postponedId: Int = 0,
+    val postSource: PostSource? = null,
+    val geo: PostGeo? = null,
+    val copyHistory: ArrayList<Any>? = null,
 )
 
 object WallService {
@@ -104,4 +107,32 @@ data class PostReposts(
 
 data class PostViews(
     val count: Int = 0,
+)
+
+data class PostSource(
+    val type: String = "",
+    val platform: String = "",
+    val data: String = "",
+    val url: String = "",
+)
+
+data class PostGeo(
+    val type: String = "",
+    val coordinates: String = "",
+    val place: PostGeoPlace? = null,
+)
+
+data class PostGeoPlace(
+    val id: Int = 0,
+    val title: String = "",
+    val latitude: Int = 0,
+    val longitude: Int = 0,
+    val created: Int = 0,
+    val icon: String = "",
+    val checkins: Int = 0,
+    val updated: Int = 0,
+    val type: Int = 0,
+    val country: Int = 0,
+    val city: Int = 0,
+    val address: String = "",
 )
