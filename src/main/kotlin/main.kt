@@ -33,9 +33,19 @@ data class Post(
     val attachments: ArrayList<Attachment>? = null,
 )
 
+data class Comment(
+    val id: Int = 0,
+    val fromId: Int = 0,
+    val date: Int = 0,
+    val text: String = "",
+    val replyToUser: Int = 0,
+    val replyToComment: Int = 0,
+)
+
 object WallService {
     private var uid = 0
     private var posts = emptyArray<Post>()
+    private var comments = emptyArray<Comment>()
 
     private fun getUid(): Int {
         return ++uid
@@ -78,6 +88,14 @@ object WallService {
         }
 
         return result
+    }
+
+    fun createComment(postId: Int, comment: Comment): Comment {
+        val post = posts.find { postItem -> postItem.id == postId }
+        if (post === null) throw PostNotFoundException("no post with id: $postId")
+
+        comments += comment
+        return comments.last()
     }
 }
 
@@ -139,3 +157,5 @@ data class PostGeoPlace(
     val city: Int = 0,
     val address: String = "",
 )
+
+class PostNotFoundException(message: String) : RuntimeException(message)
