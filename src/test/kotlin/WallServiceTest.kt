@@ -19,7 +19,7 @@ class WallServiceTest {
 
         val result = WallService.update(newPost.copy(text = "text update"))
 
-        assertEquals(true, result)
+        assertTrue(result)
     }
 
     @Test
@@ -28,6 +28,27 @@ class WallServiceTest {
 
         val result = WallService.update(newPost)
 
-        assertEquals(false, result)
+        assertFalse(result)
     }
+
+
+    @Test
+    fun createComment_successful() {
+        val newPost = WallService.add(Post())
+        val newComment = Comment(id = 1)
+
+        val result = WallService.createComment(newPost.id, newComment)
+
+        assertNotEquals(0, result.id)
+    }
+
+    @Test(expected = PostNotFoundException::class)
+    fun createComment_unsuccessful() {
+        WallService.add(Post())
+        val newComment = Comment()
+
+        WallService.createComment(0, newComment)
+    }
+
+
 }

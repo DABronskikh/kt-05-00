@@ -1,3 +1,5 @@
+import interfaces.Attachment
+
 fun main() {
 }
 
@@ -25,11 +27,25 @@ data class Post(
     val markedAsAds: Boolean = true,
     val isFavorite: Boolean = true,
     val postponedId: Int = 0,
+    val postSource: PostSource? = null,
+    val geo: PostGeo? = null,
+    val copyHistory: ArrayList<Any>? = null,
+    val attachments: ArrayList<Attachment>? = null,
+)
+
+data class Comment(
+    val id: Int = 0,
+    val fromId: Int = 0,
+    val date: Int = 0,
+    val text: String = "",
+    val replyToUser: Int = 0,
+    val replyToComment: Int = 0,
 )
 
 object WallService {
     private var uid = 0
     private var posts = emptyArray<Post>()
+    private var comments = emptyArray<Comment>()
 
     private fun getUid(): Int {
         return ++uid
@@ -73,6 +89,14 @@ object WallService {
 
         return result
     }
+
+    fun createComment(postId: Int, comment: Comment): Comment {
+        val post = posts.find { postItem -> postItem.id == postId }
+        if (post === null) throw PostNotFoundException("no post with id: $postId")
+
+        comments += comment
+        return comments.last()
+    }
 }
 
 data class PostComments(
@@ -105,3 +129,33 @@ data class PostReposts(
 data class PostViews(
     val count: Int = 0,
 )
+
+data class PostSource(
+    val type: String = "",
+    val platform: String = "",
+    val data: String = "",
+    val url: String = "",
+)
+
+data class PostGeo(
+    val type: String = "",
+    val coordinates: String = "",
+    val place: PostGeoPlace? = null,
+)
+
+data class PostGeoPlace(
+    val id: Int = 0,
+    val title: String = "",
+    val latitude: Int = 0,
+    val longitude: Int = 0,
+    val created: Int = 0,
+    val icon: String = "",
+    val checkins: Int = 0,
+    val updated: Int = 0,
+    val type: Int = 0,
+    val country: Int = 0,
+    val city: Int = 0,
+    val address: String = "",
+)
+
+class PostNotFoundException(message: String) : RuntimeException(message)
